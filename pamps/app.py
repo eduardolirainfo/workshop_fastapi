@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from .routes import main_router
 
 app = FastAPI(
     title="Pamps",
@@ -6,4 +7,4 @@ app = FastAPI(
     description="Pamps is a posting app",
 )
 
-
+app.include_router(main_router)
