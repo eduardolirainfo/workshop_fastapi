@@ -1,7 +1,7 @@
 import typer
 from rich.console import Console
 from rich.table import Table
-from sqlmodel import Session, select
+from sqlmodel import SQLModel, Session, select
 
 from .config import settings
 from .db import engine
@@ -60,3 +60,15 @@ def create_user(email: str, username: str, password: str):
         session.refresh(user)
         typer.echo(f"created {username} user")
         return user
+
+
+@main.command()
+def reset_db(
+    force: bool = typer.Option(
+        False, "--force", "-f", help="Run with no confirmation"
+    )
+):
+    """Resets the database tables"""
+    force = force or typer.confirm("Are you sure?")
+    if force:
+        SQLModel.metadata.drop_all(engine)
